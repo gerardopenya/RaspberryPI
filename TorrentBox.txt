@@ -1,0 +1,161 @@
+https://pimylifeup.com/raspberry-pi-torrentbox/
+https://youtu.be/t5NziDx6mlQ
+
+
+El resumen es que se puede ejecutar muy facilmente una secuencia de comandos en forma de un scritp y finalmente se deben editar 3 archivos colocando las preferencias y actualizando el usuario con el que se ejecutara el transmission deamon y conectando la memoria externa llamada Movil-2 a la raspi
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install transmission-daemon
+sudo service transmission-daemon stop
+sudo mkdir -p /pi/media/Movil-2/torrentDownloads
+sudo mkdir -p /pi/media/Movil-2/torrentDownloads/incomplete
+sudo chown -R pi:pi /etc/transmission-daemon
+sudo chown -R pi:pi /etc/init.d/transmission-daemon
+sudo chown -R pi:pi /var/lib/transmission-daemon
+sudo mkdir -p /home/pi/.config/transmission-daemon/
+sudo ln -s /etc/transmission-daemon/settings.json /home/pi/.config/transmission-daemon/
+sudo chown -R pi:pi /home/pi/.config/transmission-daemon/
+
+
+sudo nano /etc/transmission-daemon/settings.json
+"incomplete-dir": "/pi/media/Movil-2/torrentDownloads/incomplete",
+"incomplete-dir-enabled": true,
+"download-dir": "/pi/media/Movil-2/torrentDownloads",
+"rpc-password": "Your_Password",
+"rpc-username": "pi",
+"rpc-whitelist": "192.168.1.*",
+
+sudo nano /etc/init.d/transmission-daemon
+USER=pi
+
+sudo nano /etc/systemd/system/multi-user.target.wants/transmission-daemon.service
+user=pi
+
+sudo service transmission-daemon reload
+sudo service transmission-daemon start
+
+
+Raspberry Pi TorrentBox: Build an Always-On Torrent Machine
+by Gus | Jul 13, 2015 | Intermediate | 71 comments
+
+A Raspberry Pi TorrentBox is a great way to have a cheap affordable always on torrent machine. If you’re a heavy or light torrent user, then this still works pretty well for both!
+I have filed this under the intermediate projects as it can get a bit sensitive when it comes to file permissions especially when installing as part of a NAS.
+If you want to see how this is done visually then please be sure to check the video I have prepared below. If you’re not interested in the video then there are text instructions right below.
+If you do like the video then please make sure you subscribe to the channel so you stay up to date with the all the latest guides and projects.
+Equipment
+The equipment that I use in this Raspberry Pi TorrentBox tutorial.
+Required
+Raspberry PI
+4 GB SD Card (8 GB+ Recommended) or Micro SD Card if you’re using a Raspberry Pi 2 or B+
+Ethernet Cord or WiFi dongle
+Optional
+External Hard drive (Pretty important as a SD Card will fill up really fast)
+USB Keyboard
+USB Mouse
+1 HDMI Cord
+Raspberry Pi Cases
+Note: It is important to know that the USB ports on the Raspberry Pi might not be enough to power an external drive if you plan on using one. To fix the problem you will probably need to invest in a powered USB hub.
+ 
+ 
+
+Setting Up Raspberry Pi TorrentBox
+Firstly, we will need to install Raspbian onto the Raspberry Pi. If you haven’t already done this, then check out my awesome guide on installing NOOBs Raspberry Pi. It will take you through all the steps that you will need to do to get it installed.
+In this tutorial we will be making use of the transmission package. I have spent a fair bit of time researching deluge vs transmission and decided on transmission. This is mainly because I have used transmission before and is able to handle magnet links through the web interface.  It has also been relatively stable and haven’t had any issues once I got past the initial setup stage.
+This works really well along side the Raspberry Pi NAS, this way you can have your files stored on a external drive and accessible over the network.
+Setting up the torrent client is incredibly easy and won’t take much work before you have this up and running. The thing you will need to be care of the most in this Raspberry Pi torrent box tutorial is the folder/file permissions.
+Firstly let’s bring the Pi up to date to avoid any potential issues installing the torrent client.
+sudo apt-get update
+sudo apt-get upgrade
+
+Firstly, lets download and install transmission by using the following command
+sudo apt-get install transmission-daemon
+
+If you plan on storing on an external drive for example a USB hard drive then we need to make directories for the torrents to stored. (NASHDD1 is the hard drive I mounted in the NAS tutorial)
+sudo mkdir -p /media/NASHDD1/torrent-inprogress
+sudo mkdir -p /media/NASHDD1/torrent-complete
+
+Now we will need to make a few changes to the transmission settings file, enter the following command:
+sudo nano /etc/transmission-daemon/settings.json
+
+I recommended making the following changes but there are other settings you may want to update depending on your preference. If you want information all the settings you can change then check out transmissions website here.
+
+"incomplete-dir": "/media/NASHDD1/torrent-inprogress",
+"incomplete-dir-enabled": true,
+"download-dir": "/media/NASHDD1/torrent_complete",
+"rpc-password": "Your_Password",
+"rpc-username": "Your_Username",
+"rpc-whitelist": "192.168.*.*",
+
+Now reload transmission, if you restart your changes to the config file will be lost. You can reload the service by entering the following command.
+sudo service transmission-daemon reload
+
+If you didn’t change the location of the download directories you can skip to step 17, otherwise complete the next few steps.
+
+We will also need to update a few more places to make sure that transmission runs as the correct user, if we don’t we will run into lots of errors. First lets stop the transmission service by entering the following command:
+sudo service transmission-daemon stop
+
+Now we need to edit the daemon so it launches as the user who owns the directory we wish to store in (To check who owns the folder use ls -l /your_directory/download_dir), 
+first open the file by entering the following command.
+sudo nano /etc/init.d/transmission-daemon
+In here edit the user so it runs as the user who owns the directory we’re storing our downloads in. In my case it is pimylifeup instead of debian-transmission. 
+
+We need do this because the folder we are going to store our torrents are likely to be owned by a different user to the default transmission.
+
+To see who owns the directories use ls -l in the folder that contains the download folders. (Update pimylifeup with the relevant username)
+USER=pimylifeup
+
+We also need to chown some files since we are no longer using the debian-transmission user. If you don’t do this you errors and transmission will fail to launch. (Make sure you update pimylifeup with the username you’re using)
+
+sudo chown -R pimylifeup:pimylifeup /etc/transmission-daemon
+sudo chown -R pimylifeup:pimylifeup /etc/init.d/transmission-daemon
+sudo chown -R pimylifeup:pimylifeup /var/lib/transmission-daemon
+
+We also need to change the user in the following file. Failing to do will result in an error when go to relaunch the service.
+
+sudo nano /etc/systemd/system/multi-user.target.wants/transmission-daemon.service
+
+In here change the user to the relevant user, in my case it is pimylifeup.
+user=pimylifeup
+
+Now reload the systemctl file by entering the following:
+sudo systemctl daemon-reload
+
+Next we need to create the directory where the setting.json file will be accessed by the transmission-daemon.
+
+We then need to create a symbolic link (ln) back to the settings file we edited earlier, update pimylifeup with the relevant username. (If don’t don’t do this then transmission will create a default file in it’s place)
+
+sudo mkdir -p /home/pimylifeup/.config/transmission-daemon/
+
+
+sudo ln -s /etc/transmission-daemon/settings.json /home/pimylifeup/.config/transmission-daemon/
+
+sudo chown -R pimylifeup:pimylifeup /home/pimylifeup/.config/transmission-daemon/
+
+
+Let's start the transmission service back up by entering the following.
+sudo service transmission-daemon start
+
+Now you can check out your torrent box by opening it up in a web browser.
+ If you haven't got your Pi's IP simply use the command 
+hostname -I 
+on the Pi.
+
+Enter the following URL to get to the interface. (Change the your_pi_ip with your Raspberry Pi’s IP)
+
+http://your_pi_ip:9091
+
+In here you can add & remove torrents, change settings, set schedules and much more. If you need more information on all these settings be sure to hit up transmissions website here.
+
+Troubleshooting
+Here are some of the most common issues you will probably find when following this issue
+If you’re getting an error about writing to the disk, then it is most likely that drive doesn’t have the correct permissions for the user Pi to write to it. Check the drives permission by using the ls -l /media command. This is probably the most common issue you will come across whilst completing this tutorial.
+Permissions on linux can be tricky to work out, I will be looking at writing a guide in the future to make this a bit clearer.
+If you want to use magnet torrent links simply copy & paste the link into the add torrent field and transmission will work it out for you.
+Do not set the user to root for transmission as this will bring in a lot of security issues.
+
+
+ 
+I hope you have enjoyed this tutorial on a Raspberry Pi TorrentBox! If you're after more Raspberry Pi projects then please be sure to check out the others I have on the website.
+Also please let me know what you think by commenting below, I always appreciate the feedback.
+Share This!
+
