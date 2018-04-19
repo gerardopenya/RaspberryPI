@@ -1,0 +1,286 @@
+Se resumen los pasos para instalar openCV en la raspberryPi y se anexa al final la pagina de donde se tomaron.
+Esto se hizo para ser utilizado con la darknet tambien.
+
+Con una imagen recien bajada de raspbian en abril 7 del 2018  Raspbian STRETCH 
+
+Despues de ejecutar los comandos 
+
+sudo apt-get update
+sudo apt-get upgrade
+
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+OPENCV EN LINUX
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+Instalacion de openCV.
+Se encontro un script para instalarlo en una computadora con linux
+https://github.com/milq/milq/blob/master/scripts/bash/install-opencv.sh
+
+######################################
+# INSTALL OPENCV ON UBUNTU OR DEBIAN #
+######################################
+
+# |         THIS SCRIPT IS TESTED CORRECTLY ON         |
+# |----------------------------------------------------|
+# | OS             | OpenCV       | Test | Last test   |
+# |----------------|--------------|------|-------------|
+# | Ubuntu 17.04   | OpenCV 3.4.1 | OK   | 14 Mar 2018 |
+# | Debian 9.3     | OpenCV 3.4.0 | OK   | 17 Feb 2018 |
+# | Ubuntu 16.04.2 | OpenCV 3.2.0 | OK   | 20 May 2017 |
+# | Debian 8.8     | OpenCV 3.2.0 | OK   | 20 May 2017 |
+# | Debian 9.0     | OpenCV 3.2.0 | OK   | 25 Jun 2017 |
+
+# VERSION TO BE INSTALLED
+
+OPENCV_VERSION='3.4.1'
+
+
+# 1. KEEP UBUNTU OR DEBIAN UP TO DATE
+
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y dist-upgrade
+sudo apt-get -y autoremove
+
+
+# 2. INSTALL THE DEPENDENCIES
+
+# Build tools:
+sudo apt-get install -y build-essential cmake
+
+# GUI (if you want to use GTK instead of Qt, replace 'qt5-default' with 'libgtkglext1-dev' and remove '-DWITH_QT=ON' option in CMake):
+sudo apt-get install -y qt5-default libvtk6-dev
+
+# Media I/O:
+sudo apt-get install -y zlib1g-dev libjpeg-dev libwebp-dev libpng-dev libtiff5-dev libjasper-dev libopenexr-dev libgdal-dev
+
+# Video I/O:
+sudo apt-get install -y libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev yasm libopencore-amrnb-dev libopencore-amrwb-dev libv4l-dev libxine2-dev
+
+# Parallelism and linear algebra libraries:
+sudo apt-get install -y libtbb-dev libeigen3-dev
+
+# Python:
+sudo apt-get install -y python-dev python-tk python-numpy python3-dev python3-tk python3-numpy
+
+# Java:
+sudo apt-get install -y ant default-jdk
+
+# Documentation:
+sudo apt-get install -y doxygen
+
+
+# 3. INSTALL THE LIBRARY
+
+sudo apt-get install -y unzip wget
+wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip
+unzip ${OPENCV_VERSION}.zip
+rm ${OPENCV_VERSION}.zip
+mv opencv-${OPENCV_VERSION} OpenCV
+cd OpenCV
+mkdir build
+cd build
+cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=ON -DBUILD_EXAMPLES=ON -DENABLE_PRECOMPILED_HEADERS=OFF ..
+make -j4
+sudo make install
+sudo ldconfig
+
+
+# 4. EXECUTE SOME OPENCV EXAMPLES AND COMPILE A DEMONSTRATION
+
+# To complete this step, please visit 'http://milq.github.io/install-opencv-ubuntu-debian'.
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+OPENCV EN RASPBERRY PI CON RASPBIAN STRETCH
+-------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+En una instalacion completamente nueva del sistema
+
+Se recupera algo de espacio:
+sudo apt-get purge wolfram-engine
+sudo apt-get purge libreoffice*
+sudo apt-get clean
+sudo apt-get autoremove
+
+
+2)  Se expande el filesistem de la raspberry 
+
+3)  Se actualiza
+
+sudo apt-get update -y
+sudo apt-get upgrade
+sudo apt-get update -y
+
+Basicamente despues de un upgrade es buena idea hacer nuevamente un update
+
+3) SE REINICIA LA RASPBERRY
+
+4) se instalan dependencias
+
+sudo apt-get install build-essential cmake pkg-config
+sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+sudo apt-get install libxvidcore-dev libx264-dev
+sudo apt-get install libgtk2.0-dev libgtk-3-dev
+sudo apt-get install libatlas-base-dev gfortran
+sudo apt-get install python2.7-dev python3-dev
+
+cd ~
+wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.3.0.zip
+unzip opencv.zip
+
+wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.3.0.zip
+unzip opencv_contrib.zip
+
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
+sudo python3 get-pip.py
+
+sudo pip install virtualenv virtualenvwrapper
+sudo rm -rf ~/.cache/pip
+
+
+
+5) se edita el archivo ~/.profile agregando las siguientes lineas al final
+
+# virtualenv and virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
+
+6) se recarga el perfil con los cambios
+source ~/.profile
+
+EN ESTE PUNTO TUVE PROBLEMAS YA QUE AL PARECER NO ENCONTRABA LO NECESARIO PARA EJECUTAR virtualenvwrapper POR LO QUE TUVE QUE AGREGAR ESTA LINEA JUSTO ANTES DE LAS DOS ANTERIORES EN EL ARCHIVO ~/.profile 
+Como se indica en 
+https://stackoverflow.com/questions/23997403/installed-virtualenv-and-virtualenvwrapper-python-says-no-module-named-virtuale
+
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.5
+
+7) Se crea el ambiente virtual para python3
+mkvirtualenv cv -p python3
+
+8) En este punto se debe estar dentro del ambiente virtual cv recien creado.
+Si por alguna razon no estamos en el se deben ejecutar estos comandos:
+source ~/.profile
+workon cv
+
+9) se continua con dependencias para la compilacion
+pip install numpy
+
+10) se construye el opencv
+
+cd ~/opencv-3.3.0/
+mkdir build
+cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.3.0/modules \
+    -D BUILD_EXAMPLES=ON ..
+
+
+10) se cambian los permisos del archivo /etc/dphys-swapfile
+sudo chmod 666 /etc/dphys-swapfile
+
+11) se edita el archivo /etc/dphys-swapfile basicamente esto permitira llamar al comando make con el parametro -j4 para utilizar los 4 nucleos
+
+# set size to absolute value, leaving empty (default) then uses computed value
+#   you most likely don't want this, unless you have an special disk situation
+# CONF_SWAPSIZE=100
+CONF_SWAPSIZE=1024
+
+ES RECOMENDADO REGRESAR AL VALOR ORIGINAL DESPUES DE LA INSTALACION YA QUE LA MEMORIA MICRO SD DONDE ESTA EL SISTEMA OPERATIVO PUEDE SUFRIR DANYOS
+
+12) se reinicia el servicio del archivo swap
+
+sudo /etc/init.d/dphys-swapfile stop
+sudo /etc/init.d/dphys-swapfile start
+
+13) SE ejecuta el make para reconstruir el openCV y 
+
+make -j4
+
+
+14) al terminar la compilacion se verifica que exista un archivo en la ruta 
+
+ls -l /usr/local/lib/python3.5/site-packages/
+total 1852
+-rw-r--r-- 1 root staff 1895932 Mar 20 21:51 cv2.cpython-34m.so
+
+El archivo puede tener distintos nombres pero debe renombrarse
+
+15) renombrar archivo 
+
+cd /usr/local/lib/python3.5/site-packages/
+sudo mv cv2.cpython-35m-arm-linux-gnueabihf.so cv2.so
+
+16) se crea un link en la ruta de los virtual envs
+
+cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
+ln -s /usr/local/lib/python3.5/site-packages/cv2.so cv2.so
+
+17) se abre una nueva terminal y se ejecutan los siguientes comandos para verificar la instalacion
+
+source ~/.profile 
+workon cv
+python
+>>> import cv2
+>>> cv2.__version__
+'3.3.0'
+>>>
+
+18) se pueden ahora borrar las rutas con los fuentes
+
+rm -rf opencv-3.3.0 opencv_contrib-3.3.0
+
+19) se devuelve el archivo /etc/dphys-swapfile a su estado original revirtuiendo los cambios en el paso 11
+
+20) se recambian los permisos sobre el archivo /etc/dphys-swapfile
+Sudo cmod 644 dphys-swapfile
+
+21) se re ejecuta el paso 12
+
+
++++++++++++++++=============================================================================================================================================================
+	Instalacion de darknet
+
+============================================================================================================================================================================
+
+Se clono Darknet y se recompilo. Todo esto lo hice dentro del ambiente virutal y al final del proceso la prueba de instalacion de darknet funciono incluso fuera del ambiente.
+
+git clone https://github.com/pjreddie/darknet.git
+cd darknet
+
+
+Se modifican los permisos del archivo Makefile
+Sudo chmod 664 Makefile
+
+Se edita el archivo Makefile indicando que se usara opencv
+OPENCV=1
+
+Se recompila el proyecto
+
+make
+
+
+
+El proceso fue exitoso ya que al teclear 
+
+./darknet
+
+
+Se obtuvo 
+
+usage: ./darknet <function>
+
+
+Prueba de utilizacion
+
+./darknet imtest data/eagle.jpg
