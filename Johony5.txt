@@ -1,0 +1,229 @@
+pi@raspberrypi:~/workspaces/Arduino-Johnny5/joystick $ history
+    1  sudo raspi-config
+    2  sudo iwlist wlan0 scan 
+    3  sudo raspi-config
+    4  sudo nano /etc/default/keyboard 
+    5  ls
+    6  exit
+    7  sudo nano /etc/wpa_supplicant/wpa_supplicant.conf 
+    8  sudo ifdown wlan0
+    9  sudo ifup wlan0
+   10  ifconfig wlan0
+   11  ls ~/.ssh
+   12  cd ~
+   13  install -d -m 700 ~/.ssh
+   14  ls ~/.ssh
+   15  ls ~/.ssh/authorized-keys 
+   16  cat  ~/.ssh/authorized-keys 
+   17  rm  ~/.ssh/authorized-keys 
+   18  ls ~/.ssh/authorized-keys 
+   19  ifconfig wlan0
+   20  ls ~/.ssh/authorized-keys 
+   21  ls ~/.ssh/
+   22  ls ~/.ssh/authorized-keys 
+   23  cat  ~/.ssh/authorized-keys 
+   24  ls
+   25  vncserver
+   26  vncserver -kill :1
+   27  npm
+   28  sudo npm install -g npm
+   29  sudo apt-get install -y build-essential
+   30  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+   31  sudo apt-get install -y nodejs
+   32  node -v
+   33  sudo npm install -g npm
+   34  cd workspaces/
+   35  cd Arduino-Johnny5/
+   36  dir
+   37  ls
+   38  mkdir strobo
+   39  cd strobo/
+   40  sudo nano
+   41  mkdir workspaces
+   42  cd workspaces/
+   43  mkdir Arduino-Johnny5
+   44  cd Arduino-Johnny5/
+   45  ifconfig wlan0
+   46  apt-get install nodejs-legacy
+   47  sudo apt-get install nodejs-legacy
+   48  ls
+   49  cd StrobeLED-FirebaseSetup/
+   50  npm install johnny-five
+   51  node init
+   52  npm init
+   53  npm install johnny-five
+   54  npm install firebase --save
+   55  java -version
+   56  ls
+   57  caat strobe.js 
+   58  cat strobe.js 
+   59  node strobe.js 
+   60  cd ~/Desktop/
+   61  ls
+   62  nano ninja.desktop
+   63  sudo apt-get update && sudo apt-get upgrade
+   64  sudo apt-get install ninja-ide
+   65  cd ~
+   66  pwd
+   67  cd ninja-ide
+   68  [Desktop Entry]
+   69  Name=Ninja IDE
+   70  Comment=Integrated DeveLopment Environment for Python
+   71  Exec=/home/pi/ninja-ide/ninja-ide.py
+   72  Icon=/home/pi/ninja-ide/icon.png
+   73  Terminal=false
+   74  Type=Application
+   75  Categories=Application;Development;
+   76  apt-get autoremove
+   77  sudo apt-get autoremove
+   78  ls
+   79  sudo apt-get -purge remove ninja-ide
+   80  apt-get -purge remove ninja-ide
+   81  apt-get-purge remove ninja-ide
+   82  apt-get -purge remove ninja-ide
+   83  apt-get 
+   84  apt-get purge remove ninja-ide
+   85  sudo apt-get purge remove ninja-ide
+   86  sudo apt-get autoremove -purge
+   87  sudo apt-get autoremove purge
+   88  sudo apt-get autoremove --purge
+   89  ls
+   90  git clone git://github.com/ninja-ide/ninja-ide.git
+   91  cd ninja-ide/
+   92  python ninja-ide.py 
+   93  sudo apt-get install python-qt4 libjs-jquery pyflakes
+   94  python ninja-ide.py 
+   95  sudo apt-get autoremove --purge
+   96  cd..
+   97  sudo pip install requirements.txt 
+   98  sudo apt-get autoremove --purge
+   99  cd ..
+  100  cd ~
+  101  ls
+  102  sudo apt-get update && sudo apt-get install bluej
+  103  sudo bluej
+  104  cd Downloads/
+  105  ls
+  106  cd sublime_text_3/
+  107  ls
+  108  python sublime.py 
+  109  cd..
+  110  cd ..
+  111  cd ~
+  112  ls
+  113  wine
+  114  cd Downloads/
+  115  sudo dpkg -i code_1.5.3-1474534134_i386.deb 
+  116  ls
+  117  cd ..
+  118  ld
+  119  ls
+  120  cd workspaces/
+  121  cd Arduino-Johnny5/
+  122  ls
+  123  cd StrobeLED-FirebaseSetup/
+  124  ls
+  125  node strobe.js 
+  126  ls
+  127  cd workspaces/
+  128  cs Arduino-Johnny5/
+  129  ls
+  130  cd Arduino-Johnny5/
+  131  ls
+  132  cd halloween2016/
+  133  node animaSkull.js 
+  134  npm install johnny-five 
+  135  node animaSkull.js 
+  136  ls
+  137  cd workspaces/Arduino-Johnny5/
+  138  ls
+  139  cd StrobeLED-FirebaseSetup/
+  140  ls
+  141  node strobe.js 
+  142  node-red-start
+  143  sudo apt-get update
+  144  node-red-start
+  145  sudo apt-get install nodered
+  146  node strobe.js 
+  147  cd ..
+  148  ls
+  149  mkdir halloween2016
+  150  cd halloween2016/
+  151  node init
+  152  npm init
+  153  npm install johnny-five -save
+  154  ls
+  155  cat package.json 
+  156  ls
+  157  rm animaSkull.py 
+  158  node animaSkull.js 
+  159  npm install firebase -save
+  160  node animaSkull.js 
+  161  cd ~
+  162  cd workspaces/
+  163  cd Arduino-Johnny5/
+  164  ls
+  165  cs StrobeLED-FirebaseSetup/
+  166  ls
+  167  cd  StrobeLED-FirebaseSetup/
+  168  ls
+  169  node strobe.js 
+  170  cat package.json 
+  171  nano
+  172  sudo apt-get update
+  173  sudo apt-get dist-upgrade
+  174  sudo apt-get install -y rpi-chromium-mods
+  175  sudo apt-get intall -y python-sense-emu python3-sense-emu
+  176  sudo apt-get install -y python-sense-emu python3-sense-emu
+  177  udo apt-get install -y python-sense-emu-doc realvnc-vnc-viewer
+  178  sudo apt-get install -y python-sense-emu-doc realvnc-vnc-viewer
+  179  ls
+  180  cd workspaces/
+  181  ls
+  182  ifconfig
+  183  ls
+  184  cd Arduino-Johnny5/
+  185  ls
+  186  mkdir joystick
+  187  cd joystick/
+  188  node
+  189  npm init
+  190  npm update
+  191  npm install node-hid
+  192  ls
+  193  apt-get intall build-essential git
+  194  apt-get install build-essential git
+  195  sudo apt-get install build-essential git
+  196  sudo npm install node-hid
+  197  npm install npm@latest -g
+  198  sudo npm install npm@latest -g
+  199  sudo npm install node-hid
+  200  sudo apt-get update
+  201  sudo apt-get upgrade
+  202  node -ver
+  203  node -version
+  204  node --version
+  205  pwd
+  206  ls
+  207  cd workspaces/
+  208  cd Arduino-Johnny5/
+  209  ls
+  210  cd joystick/
+  211  ls
+  212  sudo apt-get update
+  213  sudo dpkg --configure -a
+  214  sudo apt-get update
+  215  sudo apt-get upgrade
+  216  cd workspaces/Arduino-Johnny5/joystick/
+  217  ls
+  218  npm install node-hid
+  219  sudo apt-get install libusb-1.0-0-dev
+  220  npm install node-hid
+  221  ls
+  222  node joystick.js 
+  223  sudo apt-get install libusb-1.0-0-dev
+  224  apt-get autoremove
+  225  sudo apt-get autoremove
+  226  history
+pi@raspberrypi:~/workspaces/Arduino-Johnny5/joystick $
+
