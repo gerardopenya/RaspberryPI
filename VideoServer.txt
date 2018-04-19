@@ -1,0 +1,52 @@
+Tomado de https://www.youtube.com/watch?v=lNvYanDLHZA
+
+En el anyo en que se subio el video era necesario instalar GStreamer en la Raspberry modificando incluso el archivo con la lista de fuentes pero en 2017 parece ya venir instalado como se indica en el principio de este blog
+https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=112354
+
+
+Se instala adicionalmente otra parte del proyecto con 
+sudo apt-get install gstreamer1.0-tools
+
+http://raspberrypi.stackexchange.com/questions/27483/how-to-install-and-use-gstreamer-on-latest-raspbian
+
+
+Se edita y se hace ejecutable un archivo que sera el shell encargado de mandar el stream a la ip y puerto indicados:.
+
+#!/bin/bash
+clear
+raspivid -n -t 0 -rot 180 -w 960 -h 720 -fps 25 -b 6000000 -o - | gst-launch-1.0 -e -vvvv fdsrc ! h264parse ! rtph264pay pt=96 config-interval=5 ! udpsink host=192.168.1.66 port=5555
+
+
+
+En windows se instala la ultima version de Gstreamer
+https://gstreamer.freedesktop.org/download/
+
+SE INSTALA LA VERSION COMPLETA (durante la demostracion del video asi se hace) verificando que todos los elementos esten seleccionados.
+
+SE crea un archivo batch que sera el que levante la ventana que mostrara el stream\
+@echo off
+cd D:\gstreamer\1.0\x86_64\bin
+gst-launch-1.0 -e -v udpsrc port=5555 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! fpsdisplaysink sync=false text-overlay=false
+
+
+
+Ligas de recursos
+http://vontaene.de/raspbian-updates/dists/main/
+http://robogoby.blogspot.mx/2014/01/raspi-camera-gstreamer-10-w-windows-7.html
+
+
+
+Una modificacion que seria excelente seria que el shell que se ejecuta en la raspberry se pudiera modificar en el momento que recibe una conexion de un cliente de modo que este pueda ver el video.
+
+Si se pudiera eliminar la instalacion del Gstreamer en el cliente seria mucho mejor.
+
+Lo ideal seria que sin importar de donde venga la conexion el servidor le envie el video… auneque esto ya de por si podria ofrecer cierta seguridad.
+
+Se puede hacer un programa en js que obtenga la ip de donde se esta conectando para que el servidor se ejecute y mande el stream al cliente correcto.
+
+
+Otra posibilidad es crear los sockets que se encarguen de todo des de cero. No se que tan complejo seria.pero ya hay chats que implementan algo parecido asi que es posible
+https://github.com/nathantech2005/PeerChat
+
+
+

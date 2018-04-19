@@ -1,0 +1,158 @@
+Ya instalada la imagen del SO 
+
+https://www.raspberrypi.org/documentation/configuration/raspi-config.md
+se expande el fileSystem entrando al panel de configuracion con el comando sudo raspi-config
+
+Y se selecciona el layout correcto para el teclado utilizado con los comandos o la interfaz de raspbian
+
+sudo nano /etc/default/keyboard 
+
+
+and hit enter. locate the following line
+XKBLAYOUT=”gb”
+Change the gb to us (This assumes you want a us mapping, if not replace the gb with the two letter code for your country)
+and reboot your machine.
+
+
+
+Se reinicia la raspberrypi
+
+Se activa el WIFI
+https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+
+sudo iwlist wlan0 scan  PARA BUSCAR LAS REDES 
+
+O directamente si ya se conocen los datos de conexion
+
+Open the wpa-supplicant configuration file in nano:
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+Go to the bottom of the file and add the following:
+network={
+    ssid="The_ESSID_from_earlier"
+    psk="Your_wifi_password"
+}
+
+Now save the file by pressing Ctrl+X then Y, then finally press Enter.
+
+At this point, wpa-supplicant will normally notice a change has occurred within a few seconds, and it will try and connect to the network. If it does not, either manually restart the interface with 
+sudo ifdown wlan0 
+
+and 
+
+sudo ifup wlan0
+
+, or reboot your Raspberry Pi with 
+
+sudo reboot.
+
+You can verify if it has successfully connected using 
+
+ifconfig wlan0
+
+If the inet addr field has an address beside it, the Pi has connected to the network. If not, check your password and ESSID are correct.   
+
+
+
+
+
+
+Para conectarme con la raspberrypi desde mi laptop sin tener que teclear un password cada vez, se  genera un certificado segun los pasos descritos en 
+
+https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
+
+EStos son los comandos utilizados, en negrillas va lo que yo teclee, el passphrase  del certificado es halloween
+
+Gerardo@SkyNet-III MINGW64 /d/Workspaces/Raspberrypi/keys
+$ ssh-keygen -t rsa -C ger@pi
+Generating public/private rsa key pair.
+Enter file in which to save the key ( /c/Users/Gerardo/.ssh/id_rsa ): /d/Workspaces/Raspberrypi/keys/id-rsa
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /d/Workspaces/Raspberrypi/keys/id-rsa.
+Your public key has been saved in /d/Workspaces/Raspberrypi/keys/id-rsa.pub.
+The key fingerprint is:
+SHA256:dMrUq7ZVreGj/860RSZoA3BykJaLU2zcOtEvUBeqW4U RasberrypPi 4 halloween 2016
+The key's randomart image is:
++---[RSA 2048]----+
+|       o+B+ o.   |
+|        @*o+     |
+|       =o=E..    |
+|      o+++.+.o   |
+|       .S.o.* o o|
+|         + + + + |
+|        + . + . .|
+|       . o . + o |
+|        . ...o=  |
++----[SHA256]-----+
+
+
+
+SE genera el juego de llaves publica y privadas. TEngo que generar una version de la llave privada en el formato ppk para poder utilizar PuTTY utilizando el convertidor PuTTYGen y al final obtengo el archivo id-rsa.ppk
+
+RECUERDA LIMPIAR LOS ARCHIVOS DE LAS LLAVES GENERADAS YA QUE USUALMENTE TRAEN UNA CABECERA Y UN PIE QUE INTERFIERE COMO ESTOS
+Private-MAC: 4b8431568eab75da631e6732f64008669ffc087f
+
+PuTTY-User-Key-File-2: ssh-rsa
+Encryption: aes256-cbc
+Comment: imported-openssh-key
+Public-Lines: 6
+
+
+
+https://www.raspberrypi.org/documentation/remote-access/ssh/README.md
+3. Enable SSH
+The Raspberry Pi has an SSH server enabled by default. The SSH server on your Raspberry Pi may be disabled, in which case you will have to enable it manually. This is done using raspi-config:
+Enter sudo raspi-config in the terminal, then navigate to ssh, hit Enter and select Enable or disable ssh server.
+
+
+https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
+
+Copy your public key to your Raspberry Pi
+If your Pi does not have an .ssh directory you will need to set one up so that you can copy the key from your computer.
+
+cd ~
+install -d -m 700 ~/.ssh
+
+To copy your public key to your Raspberry Pi, use the following command to append the public key to your authorized_keys file on the Pi, sending it over SSH:
+
+cat ~/.ssh/id_rsa.pub | ssh <USERNAME>@<IP-ADDRESS> 'cat >> .ssh/authorized_keys'
+
+
+
+Note that this time you will have to authenticate with your password. The default user is pi with the password raspberry . You can add users and change each user's password.
+Cambiado el password a calabaza
+
+Now try ssh <USER>@<IP-ADDRESS> and you should connect without a password prompt.
+If you see a message "Agent admitted failure to sign using the key" then add your RSA or DSA identities to the authentication agent ssh-agent then execute the following command:
+ssh-add
+If this did not work, delete your keys with rm ~/.ssh/id* and follow the instructions again.
+You can also send files over SSH using the scp command (secure copy). See the SCP guide for more information.
+
+Esta es la salida de los comandos utilizados, la ip despues de configurar la raspberry es 192.168.1.71 y aun tiene el usuario y pwd default
+
+Gerardo@SkyNet-III MINGW64 /d/Workspaces/Raspberrypi/keys
+$ ssh pi@192.168.1.71
+pi@192.168.1.71's password:
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Sep 23 04:46:50 2016
+pi@raspberrypi:~ $ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  python_games  Templates  Videos
+pi@raspberrypi:~ $
+
+OJO ESto es usando la consola de GIT que tiene el shell con ssh. Posterior a esto nos conectamos  con PuTTY utilizando el certificado de llave privada.
+
+
+
+
+
+
+
+
+Abre una conexion grafica del escritorio con VNC
+https://www.raspberrypi.org/documentation/remote-access/vnc/README.md
